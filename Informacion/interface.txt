@@ -1,0 +1,174 @@
+de Inicio (Dashboard)
+Resumen General:
+
+Número total de clientes, préstamos y pagos registrados.
+
+Saldo global pendiente y total pagado.
+
+Gráfica circular para mostrar la distribución de préstamos (activos, finalizados, vencidos).
+
+Alertas rápidas:
+
+Préstamos próximos a vencer.
+
+Clientes con pagos atrasados.
+
+2. Módulo de Clientes
+Lista de Clientes
+Tabla con columnas:
+
+ID del Cliente.
+
+Nombre completo.
+
+Documento de identidad (DNI, RFC, etc.).
+
+Teléfono y correo.
+
+Número de préstamos asociados.
+
+Botones de acciones: Ver, Editar, Eliminar.
+
+Formulario de Creación y Edición de Cliente
+Campos:
+
+Nombre completo.
+
+Identificación (DNI, RFC, etc.).
+
+Datos de contacto (teléfono, correo).
+
+Botones: Guardar, Cancelar.
+
+Detalle del Cliente
+Información del cliente.
+
+Lista de préstamos asociados con opción de "Ver detalles".
+
+3. Módulo de Gestión de Préstamos
+Lista de Préstamos
+Vista tabular con las siguientes columnas:
+
+ID del Préstamo.
+
+Monto total.
+
+Fecha de inicio.
+
+Interés aplicado (%).
+
+Plazo (meses).
+
+Saldo pendiente.
+
+Estado (Activo, Finalizado, Vencido).
+
+Cliente asociado.
+
+Botones de acciones: Ver Detalles, Editar, Eliminar.
+
+Formulario de Creación y Edición de Préstamo
+Selección de Cliente asociado (búsqueda rápida).
+
+Campos:
+
+Monto del préstamo.
+
+Fecha de inicio.
+
+Tasa de interés (%).
+
+Plazo (meses).
+
+Observaciones adicionales.
+
+Botones: Guardar, Cancelar.
+
+Detalle del Préstamo
+Información completa del préstamo.
+
+Lista de pagos asociados:
+
+Fecha de pago.
+
+Monto pagado.
+
+Tipo de pago.
+
+Observaciones.
+
+Botón para registrar un nuevo pago.
+
+4. Módulo de Gestión de Pagos
+Lista de Pagos
+Tabla con columnas:
+
+ID del Pago.
+
+ID del Préstamo asociado.
+
+Fecha de pago.
+
+Monto pagado.
+
+Tipo de pago (Efectivo, Tarjeta, Transferencia).
+
+Observaciones.
+
+Botones: Editar, Eliminar.
+
+Formulario de Registro de Pago
+Selección del préstamo asociado (búsqueda rápida).
+
+Campos:
+
+Fecha de pago.
+
+Monto pagado.
+
+Tipo de pago (dropdown con opciones válidas).
+
+Observaciones adicionales.
+
+Botones: Guardar, Cancelar.
+
+5. Módulo de Reportes
+Filtros avanzados:
+
+Rango de fechas.
+
+Estado del préstamo.
+
+Cliente específico.
+
+Tipo de pago.
+
+Reportes generados:
+
+Exportación en PDF o Excel.
+
+Resumen financiero del cliente (total prestado, total pagado, saldo pendiente).
+
+6. Navegación y Diseño
+Barra de navegación lateral con las siguientes secciones:
+
+Dashboard (Inicio)
+
+Gestión de Clientes
+
+Gestión de Préstamos
+
+Gestión de Pagos
+
+Reportes
+
+Configuración y Perfil de Usuario
+
+Estilo Visual: Diseño limpio y profesional.
+
+Colores neutros con detalles en tonos verdes y grises para destacar información financiera.
+
+Iconografía clara para las acciones (editar, eliminar, ver).
+
+🎨 Mockup Visual y Desarrollo
+Si quieres un prototipo más detallado o necesitas ayuda para implementarlo en tecnologías específicas (React, Angular, JavaFX, etc.), házmelo saber. Podemos trabajar en un prototipo interactivo para que lo visualices mejor.
