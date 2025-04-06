@@ -2,6 +2,7 @@ package com.aejimenez19.ControlCredito.service;
 
 import com.aejimenez19.ControlCredito.constant.ConstantEnvironment;
 import com.aejimenez19.ControlCredito.constant.ConstantExpetion;
+import com.aejimenez19.ControlCredito.dto.PrestamoResumenDto;
 import com.aejimenez19.ControlCredito.model.Prestamo;
 import com.aejimenez19.ControlCredito.repository.PrestamoRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +21,26 @@ public class PrestamoService {
     private final PrestamoRepository prestamoRepository;
 
 
-    public List<Prestamo> getLoandsFromAClient(UUID prestadorId ,UUID clientId) {
-        return prestamoRepository.findByPrestadorIdAndClienteId(prestadorId, clientId);
+    /**
+     * Retrieves all loans associated with a specific client and lender
+     *
+     * @param lenderId The unique identifier of the lender
+     * @param clientId The unique identifier of the client
+     * @return List<Prestamo> List of loans matching the criteria
+     * @throws IllegalArgumentException if either lenderId or clientId is null
+     */
+    public List<PrestamoResumenDto> getLoandsByAClient(UUID lenderId ,UUID clientId) {
+
+        if (lenderId == null || clientId == null) {
+            throw new IllegalArgumentException(ConstantExpetion.NOT_NULL_LENDER_ID_AND_CLIENT_ID);
+        }
+
+        List<Prestamo> loans = prestamoRepository.findByPrestadorIdAndClienteId(lenderId, clientId);
+
+
+        return loans.stream()
+                .map(this::mapToPrestamoResumenDto)
+                .toList();
     }
 
     /**
@@ -157,5 +177,33 @@ public class PrestamoService {
         } else {
             prestamo.setInteresRestante(interesRestante.subtract(montoPagado));
         }
+    }
+
+
+    /**
+     * Maps a Prestamo (Loan) entity to its DTO representation (PrestamoResumenDto).
+     *
+     * @param loan The loan entity to be mapped
+     * @return PrestamoResumenDto A data transfer object containing the summarized loan information
+     */
+    private PrestamoResumenDto mapToPrestamoResumenDto(Prestamo loan) {
+        return new PrestamoResumenDto(
+                loan.getId(),
+                loan.getMonto(),
+                loan.getFechaDesembolso(),
+                TransformInterestRate(loan.getTasaInteres()),
+                loan.getEstado(),
+                (loan.getSaldoRestante().add(loan.getInteresRestante()))
+        );
+    }
+
+    /**
+     * Transforms an interest rate from decimal to percentage format.
+     *
+     * @param interestRate The interest rate in decimal format (e.g., 0.15 for 15%)
+     * @return BigDecimal The interest rate converted to percentage format (e.g., 15.0)
+     */
+    private BigDecimal TransformInterestRate(BigDecimal interestRate) {
+        return interestRate.multiply(BigDecimal.valueOf(100));
     }
 }

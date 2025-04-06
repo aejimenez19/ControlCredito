@@ -13,6 +13,10 @@ public class ConstantExpetion {
     public static final String LOAN_REFERENCE_CANNOT_BE_NULL = "Loan reference cannot be null";
     public static final String INVALID_PAYMENT_AMOUNT = "Invalid payment amount";
     public static final String PAYMENT_CANNOT_BE_NULL = "Payment cannot be null";
+    public static final String FAIL_RETRIEVER_CLIENTS = "Failed to retrieve clients";
+    public static final String NOT_NULL_LENDER_ID = "Lender ID cannot be null";
+    public static final String NOT_NULL_CLIENT_ID = "Client ID cannot be null";
+    public static final String NOT_NULL_LENDER_ID_AND_CLIENT_ID = "Lender ID and Client ID cannot be null";
 
 
 }

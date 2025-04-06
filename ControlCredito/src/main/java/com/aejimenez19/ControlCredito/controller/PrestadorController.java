@@ -1,6 +1,7 @@
 package com.aejimenez19.ControlCredito.controller;
 
 
+import com.aejimenez19.ControlCredito.dto.PrestamoResumenDto;
 import com.aejimenez19.ControlCredito.model.Pago;
 import com.aejimenez19.ControlCredito.model.Persona;
 import com.aejimenez19.ControlCredito.model.Prestamo;
@@ -26,7 +27,7 @@ public class PrestadorController {
      * @endpoint GET /clientes
      * @security Requires X-User-Id header with the prestador's UUID
      *
-     * @param prestadorId UUID of the prestador/lender making the request (passed via X-User-Id header)
+     * @param lenderId UUID of the prestador/lender making the request (passed via X-User-Id header)
      * @return List<Persona> A list of all clients (Persona objects) associated with the specified prestador
      *
      * @apiNote This endpoint allows prestadores to view all their associated clients
@@ -34,19 +35,31 @@ public class PrestadorController {
      * @see PersonaService#getClientsFromTheProvider
      */
     @GetMapping("/clientes")
-    public List<Persona> getclient(@RequestHeader("X-User-Id") UUID prestadorId) {
-        return personaService.getClientsFromTheProvider(prestadorId);
+    public List<Persona> getclient(@RequestHeader("X-User-Id") UUID lenderId) {
+        return personaService.getClientsFromTheProvider(lenderId);
     }
 
-
+    /**
+     * Retrieves all loans associated with a specific client.
+     *
+     * @endpoint GET /clientes/{clienteId}/prestamos
+     *
+     * @param lenderId The UUID of the lender making the request, provided in X-User-Id header
+     * @param clienteId The UUID of the client whose loans are being requested
+     *
+     * @return List<Prestamo> A list of loan objects associated with the specified client
+     *
+     * @security Requires X-User-Id header for lender authentication
+     *
+     */
     @GetMapping("/clientes/{clienteId}/prestamos")
-    public List<Prestamo> getCustomerLoands(
-            @RequestHeader("X-User-Id") UUID prestadorId,
+    public List<PrestamoResumenDto> getLoansByClient(
+            @RequestHeader("X-User-Id") UUID lenderId,
             @PathVariable UUID clienteId) {
-        return prestamoService.getLoandsFromAClient(prestadorId, clienteId);
+        return prestamoService.getLoandsByAClient(lenderId, clienteId);
     }
 
-    // Obtener los pagos de un préstamo específico
+    // Obtener el detalle de un prestamo
     @GetMapping("/prestamos/{prestamoId}/pagos")
     public List<Pago> getLoanPayments(@PathVariable UUID prestamoId) {
         return null;
@@ -63,6 +76,8 @@ public class PrestadorController {
     public Pago CreatePayment(@PathVariable UUID prestamoId, @RequestBody Pago pago) {
         return null;
     }
+
+    //Agregar un nuevo cliente prestadores
 
 
 }
