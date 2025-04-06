@@ -9,22 +9,21 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "Pagos")
+@Table(name = "pago")
 public class Pago {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_pago")
-    private Long idPago;
+    @GeneratedValue
+    private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "id_prestamo", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "prestamo_id", nullable = false)
     private Prestamo prestamo;
 
     @Column(name = "fecha_pago", nullable = false)

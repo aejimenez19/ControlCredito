@@ -8,23 +8,22 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "Prestamos")
+@Table(name = "prestamo")
 public class Prestamo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_prestamo")
-    private Long idPrestamo;
+    @GeneratedValue
+    private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
-    @JsonBackReference
-    private Cliente cliente;
+    @JoinColumn(name = "prestador_cliente_id", nullable = false)
+    private PrestadorCliente prestadorCliente;
 
     @Column(name = "monto", nullable = false, precision = 15, scale = 2)
     private BigDecimal monto;
@@ -47,10 +46,7 @@ public class Prestamo {
     @Column(name = "saldo_restante", nullable = false, precision = 15, scale = 2)
     private BigDecimal saldoRestante;
 
-    @Column(name = "interes_restante", precision = 15, scale = 2)
+    @Column(name = "intereses_restante", precision = 15, scale = 2)
     private BigDecimal interesRestante;
 
-    @OneToMany(mappedBy = "prestamo")
-    @JsonManagedReference
-    private List<Pago> pagos;
 }

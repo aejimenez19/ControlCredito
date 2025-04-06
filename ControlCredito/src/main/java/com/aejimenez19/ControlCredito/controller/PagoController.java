@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/pago")
@@ -23,9 +24,9 @@ public class PagoController {
      * @return a ResponseEntity containing a list of payments associated with the specified loan
      */
     @RequestMapping("{id}")
-    public ResponseEntity<List<Pago>> getPagoByPrestamo(@PathVariable Long id) {
+    public ResponseEntity<List<Pago>> getPagoByPrestamo(@PathVariable UUID id) {
         Prestamo prestamo = new Prestamo();
-        prestamo.setIdPrestamo(id);
+        prestamo.setId(id);
         return ResponseEntity.ok(pagoService.getPagoByPrestamo(prestamo));
     }
 

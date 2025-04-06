@@ -1,8 +1,5 @@
 package com.aejimenez19.ControlCredito.service;
 
-import com.aejimenez19.ControlCredito.model.Cliente;
-import com.aejimenez19.ControlCredito.repository.ClienteRepository;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;

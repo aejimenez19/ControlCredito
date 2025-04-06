@@ -56,7 +56,7 @@ public class LoanInterestSchedulerService {
                     updateLoanDetails(loan);
                 }
             } catch (Exception e) {
-                throw new LoanProcessingException(String.format(ConstantExpetion.LOAN_PROCESSING_ERROR, loan.getIdPrestamo()), e);
+                throw new LoanProcessingException(String.format(ConstantExpetion.LOAN_PROCESSING_ERROR, loan.getId()), e);
             }
         }
 

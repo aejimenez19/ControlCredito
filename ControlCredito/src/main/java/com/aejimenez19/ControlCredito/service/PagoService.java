@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -99,7 +100,7 @@ public class PagoService {
      */
     private void updateLoanBalance(Pago savedPago) {
         try {
-            Long loanId = savedPago.getPrestamo().getIdPrestamo();
+            UUID loanId = savedPago.getPrestamo().getId();
             BigDecimal paymentAmount = savedPago.getMontoPagado();
             prestamoService.updateBalances(loanId, paymentAmount);
         } catch (Exception e) {

@@ -2,7 +2,6 @@ package com.aejimenez19.ControlCredito.service;
 
 import com.aejimenez19.ControlCredito.constant.ConstantEnvironment;
 import com.aejimenez19.ControlCredito.constant.ConstantExpetion;
-import com.aejimenez19.ControlCredito.model.Cliente;
 import com.aejimenez19.ControlCredito.model.Prestamo;
 import com.aejimenez19.ControlCredito.repository.PrestamoRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,20 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PrestamoService {
     private final PrestamoRepository prestamoRepository;
 
-    /**
-     * Retrieves a list of loans (Prestamos) associated with a given client (Cliente).
-     *
-     * @param cliente the client whose loans are to be retrieved
-     * @return a list of loans associated with the specified client
-     */
-    public List<Prestamo> getPrestamosByIdCliente(Cliente cliente) {
-        return prestamoRepository.findByCliente(cliente);
+
+    public List<Prestamo> getLoandsFromAClient(UUID prestadorId ,UUID clientId) {
+        return prestamoRepository.findByPrestadorIdAndClienteId(prestadorId, clientId);
     }
 
     /**
@@ -49,7 +44,7 @@ public class PrestamoService {
      */
     private Prestamo BuildPrestamo(Prestamo prestamo) {
         return Prestamo.builder()
-                .cliente(prestamo.getCliente())
+                .prestadorCliente(prestamo.getPrestadorCliente())
                 .monto(prestamo.getMonto())
                 .tasaInteres(prestamo.getTasaInteres())
                 .fechaDesembolso(prestamo.getFechaDesembolso())
@@ -92,7 +87,7 @@ public class PrestamoService {
      * @throws IllegalArgumentException if loan is not found
      */
     @Transactional
-    public void updateBalances(Long prestamoId, BigDecimal montoPagado) {
+    public void updateBalances(UUID prestamoId, BigDecimal montoPagado) {
         Prestamo prestamo = findPrestamoById(prestamoId);
         processPayment(prestamo, montoPagado);
         prestamoRepository.save(prestamo);
@@ -101,7 +96,7 @@ public class PrestamoService {
     /**
      * Finds a loan by ID
      */
-    private Prestamo findPrestamoById(Long prestamoId) {
+    private Prestamo findPrestamoById(UUID prestamoId) {
         return prestamoRepository.findById(prestamoId)
                 .orElseThrow(() -> new IllegalArgumentException(
                         ConstantExpetion.LOAN_NOT_FOUND_WITH_ID + prestamoId));
