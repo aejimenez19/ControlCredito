@@ -5,9 +5,12 @@ import com.aejimenez19.ControlCredito.dto.PrestamoResumenDto;
 import com.aejimenez19.ControlCredito.model.Pago;
 import com.aejimenez19.ControlCredito.model.Persona;
 import com.aejimenez19.ControlCredito.model.Prestamo;
+import com.aejimenez19.ControlCredito.service.PagoService;
 import com.aejimenez19.ControlCredito.service.PersonaService;
 import com.aejimenez19.ControlCredito.service.PrestamoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,7 @@ public class PrestadorController {
 
     private final PersonaService personaService;
     private final PrestamoService prestamoService;
+    private final PagoService pagoService;
 
     /**
      * Retrieves a list of clients (Persona) associated with a specific prestador (lender).
@@ -35,8 +39,10 @@ public class PrestadorController {
      * @see PersonaService#getClientsFromTheProvider
      */
     @GetMapping("/clientes")
-    public List<Persona> getclient(@RequestHeader("X-User-Id") UUID lenderId) {
-        return personaService.getClientsFromTheProvider(lenderId);
+    public ResponseEntity<List<Persona>> getclient(@RequestHeader("X-User-Id") UUID lenderId) {
+        return ResponseEntity
+                .ok()
+                .body(personaService.getClientsFromTheProvider(lenderId));
     }
 
     /**
@@ -53,31 +59,50 @@ public class PrestadorController {
      *
      */
     @GetMapping("/clientes/{clienteId}/prestamos")
-    public List<PrestamoResumenDto> getLoansByClient(
+    public ResponseEntity<List<PrestamoResumenDto>> getLoansByClient(
             @RequestHeader("X-User-Id") UUID lenderId,
             @PathVariable UUID clienteId) {
-        return prestamoService.getLoandsByAClient(lenderId, clienteId);
+        return ResponseEntity
+                .ok()
+                .body(prestamoService.getLoandsByAClient(lenderId, clienteId));
     }
 
-    // Obtener el detalle de un prestamo
-    @GetMapping("/prestamos/{prestamoId}/pagos")
-    public List<Pago> getLoanPayments(@PathVariable UUID prestamoId) {
-        return null;
+    /**
+     * Retrieves detailed information about a specific loan/prestamo.
+     *
+     * @param lenderId   The UUID of the lender making the request, provided through X-User-Id header
+     * @param prestamoId The UUID of the loan/prestamo to retrieve, provided through path variable
+     * @return Prestamo object containing the loan details
+     */
+    @GetMapping("/prestamos/{prestamoId}/detalle")
+    public ResponseEntity<Prestamo> getLoanPayments(@RequestHeader("X-User-Id") UUID lenderId,
+                                      @PathVariable UUID prestamoId) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(prestamoService.findPrestamoById(lenderId, prestamoId));
     }
 
-    // crear un prestamo asociandolo a cliente
-    @PostMapping("/clientes/{clienteId}/prestamos")
-    public Prestamo createLoans(@PathVariable UUID clienteId, @RequestBody Prestamo prestamo) {
-        return null;
+
+    @PostMapping("newPrestamo/{clienteId}")
+    public ResponseEntity<Prestamo> createLoans(@RequestHeader("X-User-Id") UUID lenderId,
+                                                @PathVariable UUID clienteId,
+                                                @RequestBody Prestamo prestamo) throws Exception {
+        return ResponseEntity.ok().body(prestamoService.savePrestamo(lenderId,clienteId, prestamo));
     }
 
-    //guardar un pago de un prestamo
-    @PostMapping("/prestamos/{prestamoId}/pagos")
-    public Pago CreatePayment(@PathVariable UUID prestamoId, @RequestBody Pago pago) {
-        return null;
+    /**
+     * Saves a payment (Pago) to the repository and returns the saved payment.
+     *
+     * @param pago the payment to be saved
+     * @return a ResponseEntity containing the saved payment
+     */
+    @PostMapping("pago/newPago")
+    public ResponseEntity<Pago> savePago(@RequestBody Pago pago) {
+        Pago savedPago = pagoService.savePago(pago);
+        return ResponseEntity.ok(savedPago);
     }
 
-    //Agregar un nuevo cliente prestadores
+
 
 
 }

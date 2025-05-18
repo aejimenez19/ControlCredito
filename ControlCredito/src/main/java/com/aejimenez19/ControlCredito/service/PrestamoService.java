@@ -3,6 +3,7 @@ package com.aejimenez19.ControlCredito.service;
 import com.aejimenez19.ControlCredito.constant.ConstantEnvironment;
 import com.aejimenez19.ControlCredito.constant.ConstantExpetion;
 import com.aejimenez19.ControlCredito.dto.PrestamoResumenDto;
+import com.aejimenez19.ControlCredito.model.PrestadorCliente;
 import com.aejimenez19.ControlCredito.model.Prestamo;
 import com.aejimenez19.ControlCredito.repository.PrestamoRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PrestamoService {
     private final PrestamoRepository prestamoRepository;
+
+    private final PrestadorClienteService prestadorClienteService;
 
 
     /**
@@ -43,15 +47,38 @@ public class PrestamoService {
                 .toList();
     }
 
+
+    public Prestamo findPrestamoById(UUID lenderId, UUID prestamoId) {
+        Prestamo prestamo = prestamoRepository.findByIdAndPrestador(prestamoId, lenderId);
+        return prestamo;
+    }
+
     /**
      * Saves a loan (Prestamo) to the repository.
      *
      * @param prestamo the loan to be saved
      * @return the saved loan
      */
-    public Prestamo savePrestamo(Prestamo prestamo) {
-        prestamo = BuildPrestamo(prestamo);
-        return prestamoRepository.save(prestamo);
+    public Prestamo savePrestamo(UUID lenderId, UUID clientId, Prestamo prestamo) throws Exception {
+        Optional<PrestadorCliente> prestadorCliente =  prestadorClienteService.findPrestadorCliente(lenderId, clientId);
+        if (prestadorCliente.isPresent()) {
+            prestamo = BuildPrestamo(prestamo, prestadorCliente.get());
+            return prestamoRepository.save(prestamo);
+        }
+       throw new Exception();
+    }
+
+    /**
+     * Updates loan balances after a payment is made
+     * @param prestamoId ID of the loan to update
+     * @param montoPagado Amount paid
+     * @throws IllegalArgumentException if loan is not found
+     */
+    @Transactional
+    public void updateBalances(UUID prestamoId, BigDecimal montoPagado) {
+        Prestamo prestamo = findPrestamoById(prestamoId);
+        processPayment(prestamo, montoPagado);
+        prestamoRepository.save(prestamo);
     }
 
     /**
@@ -62,9 +89,9 @@ public class PrestamoService {
      *
      *
      */
-    private Prestamo BuildPrestamo(Prestamo prestamo) {
+    private Prestamo BuildPrestamo(Prestamo prestamo, PrestadorCliente prestadorCliente) {
         return Prestamo.builder()
-                .prestadorCliente(prestamo.getPrestadorCliente())
+                .prestadorCliente(prestadorCliente)
                 .monto(prestamo.getMonto())
                 .tasaInteres(prestamo.getTasaInteres())
                 .fechaDesembolso(prestamo.getFechaDesembolso())
@@ -99,19 +126,6 @@ public class PrestamoService {
                 .setScale(2, RoundingMode.HALF_EVEN);
     }
 
-
-    /**
-     * Updates loan balances after a payment is made
-     * @param prestamoId ID of the loan to update
-     * @param montoPagado Amount paid
-     * @throws IllegalArgumentException if loan is not found
-     */
-    @Transactional
-    public void updateBalances(UUID prestamoId, BigDecimal montoPagado) {
-        Prestamo prestamo = findPrestamoById(prestamoId);
-        processPayment(prestamo, montoPagado);
-        prestamoRepository.save(prestamo);
-    }
 
     /**
      * Finds a loan by ID

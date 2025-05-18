@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -18,4 +17,7 @@ public interface PrestamoRepository extends JpaRepository<Prestamo, UUID> {
 
     @Query(value = "SELECT * FROM prestamos p WHERE fecha_vencimiento < CURRENT_DATE", nativeQuery = true)
     List<Prestamo> findOverdueLoans(Pageable pegeable);
+
+    @Query(value = "SELECT p FROM Prestamo p WHERE p.id = :prestamoId AND p.prestadorCliente.prestador.id = :lenderId")
+    Prestamo findByIdAndPrestador(UUID prestamoId, UUID lenderId);
 }

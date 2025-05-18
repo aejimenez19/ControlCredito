@@ -24,6 +24,7 @@ public class Pago {
 
     @ManyToOne
     @JoinColumn(name = "prestamo_id", nullable = false)
+    @JsonBackReference
     private Prestamo prestamo;
 
     @Column(name = "fecha_pago", nullable = false)

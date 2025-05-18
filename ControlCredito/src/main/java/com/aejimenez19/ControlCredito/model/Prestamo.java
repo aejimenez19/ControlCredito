@@ -22,6 +22,7 @@ public class Prestamo {
     private UUID id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "prestador_cliente_id", nullable = false)
     private PrestadorCliente prestadorCliente;
 
@@ -48,5 +49,9 @@ public class Prestamo {
 
     @Column(name = "intereses_restante", precision = 15, scale = 2)
     private BigDecimal interesRestante;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "prestamo", cascade = CascadeType.ALL)
+    private List<Pago> pagos;
 
 }

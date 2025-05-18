@@ -17,6 +17,5 @@ public class ConstantExpetion {
     public static final String NOT_NULL_LENDER_ID = "Lender ID cannot be null";
     public static final String NOT_NULL_CLIENT_ID = "Client ID cannot be null";
     public static final String NOT_NULL_LENDER_ID_AND_CLIENT_ID = "Lender ID and Client ID cannot be null";
-
-
+    public static final String LOAN_NOT_FOUND = "Loan not found";
 }

@@ -30,18 +30,7 @@ public class PagoController {
         return ResponseEntity.ok(pagoService.getPagoByPrestamo(prestamo));
     }
 
-    /**
-     * Saves a payment (Pago) to the repository and returns the saved payment.
-     *
-     * @param pago the payment to be saved
-     * @return a ResponseEntity containing the saved payment
-     */
-    @PostMapping()
-    public ResponseEntity<Pago> savePago(@RequestBody Pago pago) {
-        Pago savedPago = pagoService.savePago(pago);
 
-        return ResponseEntity.ok(savedPago);
-    }
 
 
 }
