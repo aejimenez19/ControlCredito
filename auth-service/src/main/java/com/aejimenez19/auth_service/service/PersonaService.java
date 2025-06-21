@@ -5,6 +5,7 @@ import com.aejimenez19.auth_service.repository.PersonaReporsitory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,4 +20,14 @@ public class PersonaService {
 
         return persona.getId();
     }
+
+    public Optional<Persona> getPersonaByIdentification(String identification){
+        Optional<Persona> persona = personaReporsitory.findByIdentificacion(identification);
+        return persona;
+    }
+
+    public Persona savePersona(Persona newPersona) {
+        return personaReporsitory.save(newPersona);
+    }
+
 }

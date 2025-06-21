@@ -15,9 +15,12 @@ import java.util.Enumeration;
 public class GatewayController {
     @Autowired
     private JwtUtil jwtUtil;
+    @Value("${credito.service.url}")
+    private String CREDITO_SERVICE;
 
-    private final String AUTH_SERVICE = "http://localhost:8081"; // auth-service
-    private final String CREDITO_SERVICE = "http://localhost:8082";
+    @Value("${auth.service.url}")
+    private String AUTH_SERVICE;
+
 
     private final RestTemplate restTemplate = new RestTemplate();
 

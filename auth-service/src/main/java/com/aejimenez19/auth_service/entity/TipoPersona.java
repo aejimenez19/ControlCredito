@@ -6,22 +6,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
-
 @Entity
+@Table(name = "tipo_persona")
 @Data
-@Table(name = "usuario")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Usuario {
+public class TipoPersona {
+
     @Id
-    @GeneratedValue
-    private UUID id;
-    private String usuario;
-    @Column(name = "password_hash")
-    private String password;
-    private String estado;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-
+    @Column(unique = true, nullable = false)
+    private String nombre;
 }
+

@@ -6,7 +6,6 @@ import com.aejimenez19.auth_service.dto.RegisterRequest;
 import com.aejimenez19.auth_service.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,7 @@ public class UsuarioController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
-        usuarioService.register(request.getUsuario(), request.getPassword());
+        usuarioService.register(request);
         return ResponseEntity.ok("Usuario registrado correctamente");
     }
 
