@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-prestamista',
   imports: [],
   templateUrl: './prestamista.html',
-  styleUrl: './prestamista.scss'
+  styleUrl: './prestamista.css'
 })
 export class Prestamista {
 

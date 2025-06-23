@@ -1,0 +1,84 @@
+<div class="card bg-base-100 w-96 shadow-sm">
+  <div class="card-body items-center text-center">
+    <h2 class="card-title mb-3">Login Control credito</h2>
+    <form  #loginForm="ngForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label class="input validator">
+          <svg
+            class="h-[1em] opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <g
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              stroke-width="2.5"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </g>
+          </svg>
+          <input
+            type="text"
+            required
+            placeholder="Username"
+            pattern="[A-Za-z][A-Za-z0-9\-]*"
+            minlength="3"
+            maxlength="30"
+            title="Only letters, numbers or dash" 
+            [(ngModel)]="username"
+            name="username"
+          />
+        </label>
+        <p class="validator-hint">tiene que tener minimo 3 caracteres</p>
+      </div>
+
+      <div>
+        <label class="input validator">
+          <svg
+            class="h-[1em] opacity-50"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <g
+              stroke-linejoin="round"
+              stroke-linecap="round"
+              stroke-width="2.5"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
+              ></path>
+              <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            </g>
+          </svg>
+          <input
+            type="password"
+            required
+            placeholder="Password"
+            minlength="8"
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+            title="Must be more than 8 characters, including number, lowercase letter, uppercase letter"
+            name="password"
+            [(ngModel)]="password"
+          />
+        </label>
+        <p class="validator-hint hidden">
+          Debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un
+          número
+        </p>
+      </div>
+
+      <div class="">
+        <button class="btn btn-primary w-full mt-4"  [disabled]="loginForm.invalid">Iniciar sesión</button>
+      </div>
+    </form>
+    <div class="mt-4 text-sm">
+      ¿No tienes una cuenta?
+      <a  routerLink="/register"  class="text-primary hover:underline font-semibold">  Regístrate aquí </a>
+    </div>
+  </div>
+</div>
