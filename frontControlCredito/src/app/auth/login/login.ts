@@ -1,37 +1,43 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import {FormsModule} from '@angular/forms'
+import { ChangeDetectorRef, Component, NgZone } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { LoginRequest } from '../../core/interfaces/auth-interfaces';
 import { AuthService } from '../../core/service/auth/auth-service';
+import { TokenService } from '../../core/service/token/token-service';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink, FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css'
+  styleUrl: './login.css',
 })
 export class Login {
   username = '';
   password = '';
+  errorLogin = false;
 
-
-  constructor(private authService: AuthService){}
+  constructor(
+    private authService: AuthService,
+    private tokenService: TokenService,
+    private router: Router
+  ) {}
 
   onSubmit() {
     const request: LoginRequest = {
-      usuario: this.username, 
-      password: this.password
-    }
+      usuario: this.username,
+      password: this.password,
+    };
 
     this.authService.login(request).subscribe({
       next: (response) => {
-        console.log('Respuesta del back: ', response)
+        this.tokenService.setToken(response.accessToken);
+        this.router.navigate(['/dashboard/main']);
       },
       error: (err) => {
-        console.log('Error en el login: ', err)
-      }
-    })
-
-
+        if (err.status === 500) {
+          this.errorLogin = true;
+        }
+      },
+    });
   }
 }
